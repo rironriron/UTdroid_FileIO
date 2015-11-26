@@ -57,8 +57,8 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     /* テキストファイルの場合のお作法。バイナリファイルの場合は扱いが異なる */
                     FileInputStream fis = openFileInput(FILE_NAME);
-                    InputStreamReader isw = new InputStreamReader(fis);
-                    BufferedReader br = new BufferedReader(isw);
+                    InputStreamReader isr = new InputStreamReader(fis);
+                    BufferedReader br = new BufferedReader(isr);
                     /* 1行ずつ読み込む */
                     String line;
                     while ((line = br.readLine()) != null) {
@@ -128,8 +128,8 @@ public class MainActivity extends AppCompatActivity {
 
                         /* 1行目だけが本体メモリの場合と異なる */
                         FileInputStream fis = new FileInputStream(filePath);
-                        InputStreamReader isw = new InputStreamReader(fis);
-                        BufferedReader br = new BufferedReader(isw);
+                        InputStreamReader isr = new InputStreamReader(fis);
+                        BufferedReader br = new BufferedReader(isr);
 
                         /* 1行ずつ読み込む */
                         String line;
