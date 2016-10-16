@@ -1,10 +1,14 @@
 package jp.ac.u_tokyo.t.utdroid_fileio;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
@@ -30,6 +34,9 @@ public class MainActivity extends AppCompatActivity {
 
     /* ファイルに書き出す際のファイル名 */
     private final String FILE_NAME = "myfile.txt";
+
+    /* SDカードにアクセスするPermission取得のための定数 */
+    private static final int SD_ACCESS_REQUEST_CODE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -227,5 +234,37 @@ public class MainActivity extends AppCompatActivity {
                 editTextSharedPrefs.setText("");
             }
         });
+
+        /* Android 6.0以上かどうかで条件分岐 */
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            /* Permissionを取得済みかどうか確認 */
+            String[] dangerousPermissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                    || ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                /* 未取得ならPermissionを要求 */
+                requestPermissions(dangerousPermissions, SD_ACCESS_REQUEST_CODE);
+            }else{
+                Toast.makeText(this, "SDカードにアクセスできます。", Toast.LENGTH_SHORT).show();
+            }
+        }else{
+            Toast.makeText(this, "SDカードにアクセスできます。", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /*
+     * Android 6.0以上のDANGEROUS_PERMISSION対策
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == SD_ACCESS_REQUEST_CODE) {
+            // Permissionが許可された
+            if (grantResults.length == 0) {
+                return;
+            }else if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "SDカードにアクセスできます。", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "SDカードへのアクセスを許可して下さい。", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }
