@@ -3,6 +3,7 @@
     package="jp.ac.u_tokyo.t.utdroid_fileio">
 
     <!-- SDカードを使用するためのパーミッション宣言 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
